@@ -1,0 +1,60 @@
+
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>バランスビーズ投入量自動計算</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f2f2f2;
+            padding: 20px;
+            text-align: center;
+        }
+        h1 {
+            color: #e60012;
+        }
+        input, button {
+            padding: 10px;
+            margin: 10px;
+            font-size: 16px;
+        }
+        #result {
+            margin-top: 20px;
+            font-size: 20px;
+            font-weight: bold;
+        }
+        footer {
+            margin-top: 50px;
+        }
+    </style>
+</head>
+<body>
+    <h1>バランスビーズ投入量 自動計算</h1>
+    <p>タイヤサイズを入力してください：</p>
+    <input type="text" id="tireSize" placeholder="例: 195/65R15">
+    <button onclick="calculate()">計算</button>
+    <div id="result"></div>
+    <footer>
+        <p>株式会社チップトップジャパン</p>
+    </footer>
+
+    <script>
+        function calculate() {
+            const size = document.getElementById("tireSize").value;
+            const regex = /^(\d{3})\/(\d{2})R(\d{2})$/i;
+            const match = size.match(regex);
+            if (!match) {
+                document.getElementById("result").innerText = "タイヤサイズの形式が正しくありません。";
+                return;
+            }
+            const [_, width, aspect, rim] = match.map(Number);
+            const outerDiameter = rim * 25.4 + 2 * (width * (aspect / 100));
+            const baseAmount = 12; // 外径600mmに対して12gと仮定
+            const grams = Math.round(baseAmount * (outerDiameter / 600));
+            document.getElementById("result").innerText = `推奨投入量： 約 ${grams} g`;
+        }
+    </script>
+</body>
+</html>
